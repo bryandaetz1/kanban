@@ -10,7 +10,7 @@ const completeList = document.getElementById("complete-list");
 const onHoldList = document.getElementById("on-hold-list");
 
 // Items
-let updatedFromLocalStorage = false;
+let updatedOnLoad = false;
 
 // Initialize Arrays
 let backlogListArray = [];
@@ -59,6 +59,30 @@ function updateSavedColumns() {
   });
 }
 
+function rebuildArrays() {
+  backlogListArray = [];
+  for (let i = 0; i < backlogList.children.length; i++) {
+    backlogListArray.push(backlogList.children[i].textContent);
+  }
+
+  progressListArray = [];
+  for (let i = 0; i < progressList.children.length; i++) {
+    progressListArray.push(progressList.children[i].textContent);
+  }
+
+  completeListArray = [];
+  for (let i = 0; i < completeList.children.length; i++) {
+    completeListArray.push(completeList.children[i].textContent);
+  }
+
+  onHoldListArray = [];
+  for (let i = 0; i < onHoldList.children.length; i++) {
+    onHoldListArray.push(onHoldList.children[i].textContent);
+  }
+
+  updateDOM();
+}
+
 function drag(event) {
   draggedItem = event.target;
   console.log("draggedItem", draggedItem);
@@ -84,6 +108,8 @@ function drop(event) {
   //add item to column
   const parent = allColumnsList[currentColumnIndex];
   parent.appendChild(draggedItem);
+
+  rebuildArrays();
 }
 
 // Create DOM Element for a list item
@@ -106,7 +132,7 @@ function addListElementsToColumn(columnElement, listItems) {
 // Update Columns in DOM - Reset HTML, Filter Array, Update localStorage
 function updateDOM() {
   // Check localStorage once
-  if (!updatedFromLocalStorage) {
+  if (!updatedOnLoad) {
     getSavedColumns();
   }
   // Backlog Column
@@ -125,6 +151,8 @@ function updateDOM() {
   onHoldList.textContent = "";
   addListElementsToColumn(onHoldList, onHoldListArray);
   // Run getSavedColumns only once, Update Local Storage
+  updatedOnLoad = true;
+  updateSavedColumns();
 }
 
 // On Load

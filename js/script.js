@@ -59,6 +59,31 @@ function updateSavedColumns() {
   });
 }
 
+//Add to Column List, Rest Textbox
+function addToColumn(columnIndex) {
+  const itemText = addItems[columnIndex].textContent;
+  const selectedArray = listArrays[columnIndex];
+  selectedArray.push(itemText);
+  updateDOM();
+  addItems[columnIndex].textContent = "";
+}
+
+//Show Add Item Input Box
+function showInputBox(columnIndex) {
+  addBtns[columnIndex].style.visibility = "hidden";
+  saveItemBtns[columnIndex].style.display = "flex";
+  addItemContainers[columnIndex].style.display = "flex";
+}
+
+//Hide Add Item Input Box
+function hideInputBox(columnIndex) {
+  addBtns[columnIndex].style.visibility = "visible";
+  saveItemBtns[columnIndex].style.display = "none";
+  addItemContainers[columnIndex].style.display = "none";
+  addToColumn(columnIndex);
+}
+
+//Allows arrays to reflect Drag and Drop items
 function rebuildArrays() {
   backlogListArray = [];
   for (let i = 0; i < backlogList.children.length; i++) {
